@@ -2,15 +2,17 @@ package com.example.dell.activitytest;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class FirstActivity extends AppCompatActivity {
+public class FirstActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -34,15 +36,33 @@ public class FirstActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("FirstActivity","Task id is"+getTaskId());
         setContentView(R.layout.first_layout);
         Button button1=(Button)findViewById(R.id.button_1);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               Intent intent=new Intent(Intent.ACTION_VIEW);
-               intent.setData(Uri.parse("http:"));
-               startActivity(intent);
+               SecondActivity.actionStart(FirstActivity.this,"data1","data2");
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode){
+            case 1:
+                if(requestCode == RESULT_OK){
+                    String returnedData=data.getStringExtra("data_return");
+                    Log.d("FirstActivity","returnedData");
+                }
+                break;
+            default:
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("FirstActivity","onRestart");
     }
 }
